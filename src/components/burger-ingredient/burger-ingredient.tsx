@@ -11,6 +11,7 @@ import {
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
+    const { v4: uuidv4 } = require('uuid');
     const location = useLocation();
     const dispatch = useDispatch();
     const ingredients = useSelector(burgerIngredients);
@@ -18,9 +19,7 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
       if (ingredients.length >= 5) {
         return;
       }
-      dispatch(
-        addIngredient({ ...ingredient, id: ingredients.length.toString() })
-      );
+      dispatch(addIngredient({ ...ingredient, id: uuidv4() }));
     };
 
     return (

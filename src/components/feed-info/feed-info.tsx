@@ -12,13 +12,10 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
 
 export const FeedInfo: FC = () => {
   const feed = useSelector(getFeedSelector);
-  /** TODO: взять переменные из стора */
-  const orders: TOrder[] = feed.orders;
-  // const feed = {};
 
-  const readyOrders = getOrders(orders, 'done');
+  const readyOrders = getOrders(feed.orders, 'done');
 
-  const pendingOrders = getOrders(orders, 'pending');
+  const pendingOrders = getOrders(feed.orders, 'pending');
 
   return (
     <FeedInfoUI

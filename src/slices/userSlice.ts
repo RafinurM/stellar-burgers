@@ -4,7 +4,8 @@ import {
   logoutApi,
   registerUserApi,
   TLoginData,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
@@ -14,7 +15,7 @@ type userState = {
   user: TUser | null;
   isAuth: boolean;
   isAuthCheck: boolean;
-  loginError: boolean;
+  loginError: string | undefined;
   loginRequest: boolean;
 };
 
@@ -22,7 +23,7 @@ const initialState: userState = {
   user: null,
   isAuth: false,
   isAuthCheck: false,
-  loginError: false,
+  loginError: '',
   loginRequest: false
 };
 
@@ -41,6 +42,13 @@ export const getUser = createAsyncThunk('user/getUser', async () =>
   getUserApi()
 );
 
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async ({ name, email, password }: Partial<TRegisterData>) => {
+    updateUserApi({ name, email, password });
+  }
+);
+
 export const logoutUser = createAsyncThunk('user/logout', async () =>
   logoutApi()
 );
@@ -55,7 +63,8 @@ const userSlice = createSlice({
   selectors: {
     userAuthSelector: (state) => state.isAuth,
     userSelector: (state) => state.user,
-    userAuthCheck: (state) => state.isAuthCheck
+    userAuthCheck: (state) => state.isAuthCheck,
+    userLoginError: (state) => state.loginError
   },
   extraReducers: (builder) => {
     builder
@@ -64,12 +73,12 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginRequest = false;
-        state.loginError = true;
+        state.loginError = action.error.message;
         state.isAuthCheck = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuth = true;
-        state.loginError = false;
+        state.loginError = '';
         state.loginRequest = false;
         state.user = action.payload.user;
         setCookie('accessToken', action.payload.accessToken);
@@ -84,7 +93,7 @@ const userSlice = createSlice({
         localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       .addCase(registerUser.rejected, (state) => {
-        state.isAuth = true;
+        state.isAuth = false;
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.isAuthCheck = true;
@@ -92,15 +101,18 @@ const userSlice = createSlice({
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isAuthCheck = true;
-        state.loginError = true;
+        state.loginError = action.error.message;
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
+      .addCase(logoutUser.fulfilled, (state) => {
         state.isAuth = false;
         state.user = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.meta.arg as TUser;
       });
   }
 });
 
-export const { userSelector, userAuthSelector, userAuthCheck } =
+export const { userSelector, userAuthSelector, userAuthCheck, userLoginError } =
   userSlice.selectors;
 export default userSlice;

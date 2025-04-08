@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from '../../services/store';
-
 import styles from './constructor-page.module.css';
-
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
@@ -10,7 +8,6 @@ import {
   getIngredientLoadStatus,
   getIngredients
 } from '../../slices/ingedientsSlice';
-import { getUser } from '../../slices/userSlice';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useSelector(getIngredientLoadStatus);

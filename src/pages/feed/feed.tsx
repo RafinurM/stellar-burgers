@@ -11,7 +11,7 @@ export const Feed: FC = () => {
     dispatch(getFeed());
     dispatch(getIngredients());
   }, []);
-  const { orders } = useSelector(getFeedSelector);
+  const orders = useSelector(getFeedSelector).orders;
 
   if (!orders.length) {
     return <Preloader />;

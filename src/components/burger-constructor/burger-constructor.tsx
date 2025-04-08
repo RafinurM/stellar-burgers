@@ -7,9 +7,10 @@ import {
   burgerOrderModalData,
   burgerOrderRequest,
   burgerIngredients,
-  createOrder
+  createOrder,
+  closeModal
 } from '../../slices/burgerConstructorSlice';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { userSelector } from '../../slices/userSlice';
 
 export const BurgerConstructor: FC = () => {
@@ -19,7 +20,6 @@ export const BurgerConstructor: FC = () => {
   const user = useSelector(userSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation();
   const ingredients = useSelector(burgerIngredients);
   const onOrderClick = () => {
     if (!user) {
@@ -30,7 +30,7 @@ export const BurgerConstructor: FC = () => {
     dispatch(createOrder(orderList));
   };
   const closeOrderModal = () => {
-    console.log(111);
+    dispatch(closeModal());
   };
 
   const price = useMemo(

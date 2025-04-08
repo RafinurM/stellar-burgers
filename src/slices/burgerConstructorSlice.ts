@@ -39,11 +39,9 @@ const burgerConstructorSlice = createSlice({
       switch (action.payload.type) {
         case 'bun':
           state.constructorItems.bun = action.payload;
-          // state.orders.push(action.payload);
           break;
         default:
           state.constructorItems.ingredients.push(action.payload);
-        // state.orders.push(action.payload._id);
       }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
@@ -51,6 +49,23 @@ const burgerConstructorSlice = createSlice({
         state.constructorItems.ingredients.filter(
           (item) => item.id !== action.payload
         );
+    },
+    moveIngredientDown: (state, action: PayloadAction<number>) => {
+      swap(
+        state.constructorItems.ingredients,
+        action.payload,
+        action.payload + 1
+      );
+    },
+    moveIngredientUp: (state, action: PayloadAction<number>) => {
+      swap(
+        state.constructorItems.ingredients,
+        action.payload,
+        action.payload - 1
+      );
+    },
+    closeModal: (state) => {
+      state.orderModalData = null;
     }
   },
   selectors: {
@@ -70,9 +85,17 @@ const burgerConstructorSlice = createSlice({
         state.orderRequest = false;
         state.orderModalData = action.payload.order;
         state.orders.push(action.payload.order);
+        state.constructorItems = {
+          bun: null,
+          ingredients: []
+        };
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
+      })
+      .addCase(getOrders.rejected, (state) => {
+        state.orderRequest = false;
+        state.orderModalData = null;
       });
   }
 });
@@ -84,6 +107,15 @@ export const {
   burgerOrderRequest,
   burgerOrderModalData
 } = burgerConstructorSlice.selectors;
-export const { addIngredient, removeIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  moveIngredientDown,
+  moveIngredientUp,
+  closeModal
+} = burgerConstructorSlice.actions;
 export default burgerConstructorSlice;
+
+function swap(arr: TIngredient[], a: number, b: number) {
+  arr[a] = arr.splice(b, 1, arr[a])[0];
+}

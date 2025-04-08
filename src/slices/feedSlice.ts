@@ -17,12 +17,11 @@ export const feedSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getFeedSelector: (state) => state,
-    getOrdersSelector: (state) => state.orders
+    getFeedSelector: (state) => state
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getFeed.pending, (state) => {})
+      .addCase(getFeed.rejected, (state) => {})
       .addCase(getFeed.fulfilled, (state, action) => {
         state.orders = action.payload.orders;
         state.total = action.payload.total;
@@ -31,5 +30,5 @@ export const feedSlice = createSlice({
   }
 });
 
-export const { getFeedSelector, getOrdersSelector } = feedSlice.selectors;
+export const { getFeedSelector } = feedSlice.selectors;
 export default feedSlice;
