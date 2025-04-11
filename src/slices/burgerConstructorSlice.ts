@@ -4,7 +4,7 @@ import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 
 type burgerConstructorState = {
   constructorItems: {
-    bun: TIngredient | null;
+    bun: TConstructorIngredient | null;
     ingredients: TConstructorIngredient[];
   };
   orderRequest: boolean;
@@ -27,22 +27,27 @@ export const createOrder = createAsyncThunk(
   async (order: string[]) => orderBurgerApi(order)
 );
 
-export const getOrders = createAsyncThunk('burger/getOrders', async () =>
-  getOrdersApi()
-);
+export const getOrders = createAsyncThunk('burger/getOrders', getOrdersApi);
+
+const { v4: uuid4 } = require('uuid');
 
 const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
-      switch (action.payload.type) {
-        case 'bun':
-          state.constructorItems.bun = action.payload;
-          break;
-        default:
-          state.constructorItems.ingredients.push(action.payload);
-      }
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        switch (action.payload.type) {
+          case 'bun':
+            state.constructorItems.bun = action.payload;
+            break;
+          default:
+            state.constructorItems.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: uuid4() }
+      })
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
       state.constructorItems.ingredients =

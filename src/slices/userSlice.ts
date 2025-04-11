@@ -9,7 +9,6 @@ import {
 } from '../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { setCookie } from '../utils/cookie';
 
 type userState = {
   user: TUser | null;
@@ -38,9 +37,7 @@ export const registerUser = createAsyncThunk(
     registerUserApi({ email, name, password })
 );
 
-export const getUser = createAsyncThunk('user/getUser', async () =>
-  getUserApi()
-);
+export const getUser = createAsyncThunk('user/getUser', getUserApi);
 
 export const updateUser = createAsyncThunk(
   'user/update',
@@ -49,9 +46,8 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk('user/logout', async () =>
-  logoutApi()
-);
+export const logoutUser = createAsyncThunk('user/logout', logoutApi);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -70,30 +66,27 @@ const userSlice = createSlice({
     builder
       .addCase(loginUser.pending, (state) => {
         state.loginRequest = true;
+        state.loginError = '';
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginRequest = false;
         state.loginError = action.error.message;
-        state.isAuthCheck = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuth = true;
-        state.loginError = '';
         state.loginRequest = false;
         state.user = action.payload.user;
-        setCookie('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       .addCase(registerUser.pending, (state) => {
         state.isAuth = false;
+        state.loginError = '';
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isAuth = true;
-        setCookie('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.isAuth = false;
+        state.loginError = action.error.message;
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.isAuthCheck = true;

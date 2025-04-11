@@ -26,8 +26,13 @@ export const BurgerConstructor: FC = () => {
       navigate('/login');
     }
     if (!constructorItems.bun || orderRequest) return;
+    const bunId = constructorItems.bun._id;
     const orderList = ingredients.map((item) => item._id);
-    dispatch(createOrder(orderList));
+    orderList.unshift(bunId);
+    orderList.push(bunId);
+    if (user) {
+      dispatch(createOrder(orderList));
+    }
   };
   const closeOrderModal = () => {
     dispatch(closeModal());

@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient } from '@utils-types';
+import { TIngredient, TOrder } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { getFeedSelector } from '../../slices/feedSlice';
 import { getIngredientsSelector } from '../../slices/ingedientsSlice';
@@ -11,7 +11,7 @@ import { burgerOrders } from '../../slices/burgerConstructorSlice';
 export const OrderInfo: FC = () => {
   const { number } = useParams();
   const location = useLocation();
-  let ordersData = [];
+  let ordersData: TOrder[] | null = null;
   location.pathname === `/feed/${number}`
     ? (ordersData = useSelector(getFeedSelector).orders)
     : (ordersData = useSelector(burgerOrders));
