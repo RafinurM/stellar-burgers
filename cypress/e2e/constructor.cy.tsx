@@ -3,7 +3,7 @@
 describe('Burger constructor', () => {
   beforeEach(() => {
     cy.intercept('GET', 'ingredients', { fixture: 'ingredients' });
-    cy.visit('http://localhost:4000/');
+    cy.visit('/');
   });
 
   it('add ingredient', () => {

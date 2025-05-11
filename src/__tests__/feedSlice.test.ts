@@ -21,7 +21,7 @@ describe('feedSlice tests', () => {
     updatedAt: '2025',
     number: 1,
     ingredients: ['Булка']
-  }
+  };
   const feedResponce: TFeedsResponse = {
     orders: [order],
     total: 1,
