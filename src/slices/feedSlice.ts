@@ -1,8 +1,8 @@
-import { getFeedsApi } from '@api';
+import { getFeedsApi } from '../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrdersData } from '@utils-types';
 
-const initialState: TOrdersData = {
+export const initialState: TOrdersData = {
   orders: [],
   total: 0,
   totalToday: 0
