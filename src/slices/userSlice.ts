@@ -10,7 +10,7 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 
-type userState = {
+export type userState = {
   user: TUser | null;
   isAuth: boolean;
   isAuthCheck: boolean;
@@ -18,7 +18,7 @@ type userState = {
   loginRequest: boolean;
 };
 
-const initialState: userState = {
+export const initialState: userState = {
   user: null,
   isAuth: false,
   isAuthCheck: false,

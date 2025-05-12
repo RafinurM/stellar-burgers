@@ -1,4 +1,4 @@
-import { getIngredientsApi } from '@api';
+import { getIngredientsApi } from '../utils/burger-api';
 import {
   createAsyncThunk,
   createSelector,
@@ -12,7 +12,7 @@ export type TInitialState = {
   error: string | undefined;
 };
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
   ingredients: [],
   isIngredientsLoading: false,
   error: ''

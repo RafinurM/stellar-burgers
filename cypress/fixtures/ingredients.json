@@ -1,0 +1,20 @@
+{
+    "success": true,
+    "data": [
+        {
+            "_id": "test_id_bun",
+            "name": "Мощная булка",
+            "type": "bun",
+            "proteins": 1,
+            "fat": 1,
+            "carbohydrates": 1,
+            "calories": 1,
+            "price": 100,
+            "image": "https://code.s3.yandex.net/react/code/bun-02.png",
+            "image_mobile": "https://code.s3.yandex.net/react/code/bun-02-mobile.png",
+            "image_large": "https://code.s3.yandex.net/react/code/bun-02-large.png",
+            "__v": 0
+        }
+    ]
+}
+
